@@ -1,21 +1,19 @@
-FROM node:20-alpine AS build
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY node_project/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY node_project/ .
 
 RUN npm run build
 
-FROM tomcat:10.1-jdk21
+FROM nginx:alpine
 
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-COPY --from=build /app/dist /usr/local/tomcat/webapps/ROOT
+EXPOSE 80
 
-EXPOSE 8080
-
-CMD ["catalina.sh","run"]
+CMD ["nginx", "-g", "daemon off;"]
