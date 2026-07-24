@@ -33,16 +33,16 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t vite-app:latest .'
+                sh "docker build -t ${IMAGE_NAME}:latest ."
             }
         }
 
         stage('Deploy') {
             steps {
-                sh '''
-                docker rm -f vite-app || true
-                docker run -d --name vite-app -p 8080:80 vite-app:latest
-                '''
+                sh """
+                docker rm -f ${IMAGE_NAME} || true
+                docker run -d --name ${IMAGE_NAME} -p 8080:80 ${IMAGE_NAME}:latest
+                """
             }
         }
     }
