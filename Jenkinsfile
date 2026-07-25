@@ -17,16 +17,14 @@ pipeline {
                     url: 'https://github.com/famidha2004/node.git'
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                sh """
-                cd ${PROJECT_DIR}
-                docker build -t ${IMAGE_NAME}:latest .
-                """
-            }
-        }
-
+stage('Build Docker Image') {
+    steps {
+        sh '''
+        docker build -t vite-app:latest .
+        '''
+    }
+}
+       
         stage('Deploy') {
             steps {
                 sh """
