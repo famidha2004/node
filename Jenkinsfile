@@ -11,7 +11,6 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -19,21 +18,12 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh "cd ${PROJECT_DIR} && npm install"
-            }
-        }
-
-        stage('Build Vite') {
-            steps {
-                sh "cd ${PROJECT_DIR} && npm run build"
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:latest ."
+                sh """
+                cd ${PROJECT_DIR}
+                docker build -t ${IMAGE_NAME}:latest .
+                """
             }
         }
 
