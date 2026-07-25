@@ -7,30 +7,31 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'vite-app'
-        PROJECT_DIR = 'node_project'
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/famidha2004/node.git'
             }
         }
-stage('Build Docker Image') {
-    steps {
-        sh '''
-        docker build -t vite-app:latest .
-        '''
-    }
-}
-       
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                docker build -t ${IMAGE_NAME}:latest .
+                '''
+            }
+        }
+
         stage('Deploy') {
             steps {
-                sh """
+                sh '''
                 docker rm -f ${IMAGE_NAME} || true
-                docker run -d --name ${IMAGE_NAME} -p 8080:80 ${IMAGE_NAME}:latest
-                """
+                docker run -d --name ${IMAGE_NAME} -p 8081:80 ${IMAGE_NAME}:latest
+                '''
             }
         }
     }
